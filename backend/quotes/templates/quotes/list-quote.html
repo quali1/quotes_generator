@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Главная страница с выводом цитат -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- Левая колонка с цитатами -->
+        <div class="col-md-8">
+            {% if search %}
+            <h2>Quotes</h2>
+            {% if quotes %}
+            <ul class="list-group" id="quote-list">
+                {% for quote in quotes %}
+                <li class="list-group-item quote-item">
+                    <span class="quote-text">" {{quote.title}}</span>
+                    <br>
+                    <span class="small author-info">
+                        <i class="fas fa-user"></i> {{quote.author}}
+                        {% if quote.hide_creator == False %} | {{quote.creator}} {% endif %}
+                    </span>
+                    <a href="{% url 'like-quote' quote.id %}" class="float-right like-info" style="color: black;">
+                        {% if request.user in quote.likes.all %}
+                        <i class="fas fa-heart like-icon-active"></i>
+                        {% else %}
+                        <i class="far fa-heart like-icon"></i>
+                        {% endif %}
+                        <span class="like-count">{{quote.likes.count}}</span>
+                    </a>
+                </li>
+                {% endfor %}
+                <!-- Добавьте еще цитат, если необходимо -->
+            </ul>
+            {% else %}
+            <h3>Quotes contains {{search}} not found...</h3>
+            {% endif %}
+            {% else %}
+            <ul class="list-group" id="quote-list">
+                {% for quote in quotes %}
+                <li class="list-group-item quote-item">
+                    <span class="quote-icon">&#8220;</span>
+                    <span class="quote-text">{{quote.title}}</span>
+                    <br>
+                    <span class="small author-info">
+                        <i class="fas fa-user"></i> {{quote.author}}
+                        {% if quote.hide_creator == False %} | <a href="#">{{quote.creator}}</a> {% endif %}
+                    </span>
+                    <a href="{% url 'like-quote' quote.id %}" class="float-right like-info" style="color: black;">
+                        {% if request.user in quote.likes.all %}
+                        <i class="fas fa-heart like-icon-active"></i>
+                        {% else %}
+                        <i class="far fa-heart like-icon"></i>
+                        {% endif %}
+                        <span class="like-count">{{quote.likes.count}}</span>
+                    </a>
+                </li>
+                {% endfor %}
+                <!-- Добавьте еще цитат, если необходимо -->
+            </ul>
+            {% endif %}
+        </div>
+
+        <!-- Правая колонка с фильтрами -->
+        <form method="GET" action="{% url 'list-quote' %}">
+            <div class="col-md-12">
+                <h2>Filter Options</h2>
+                <!-- Добавьте фильтры и соответствующие элементы здесь -->
+                <div class="form-group">
+                    <label for="tagFilter">Filter by Tag:</label>
+                    <select class="form-control" id="tagFilter" name="filter_value">
+                        <option>-----</option>
+                        {% for tag in tags %}
+                        <option {% if filter_value|lower == tag.tag|lower %} selected {% endif %} name="{{tag.tag|lower}}">{{tag.tag|capfirst}}</option>
+                        {% endfor %}
+                        <!-- Добавьте другие теги, если необходимо -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sortOption">Sort by:</label>
+                    <select class="form-control" id="sortOption" name="sort_value">
+                        {% for option, map in sort_mapping.items %}
+                        <option {% if sort_value == option %} selected {% endif %} value="{{option}}">{{map.1}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search Quotes" {% if search %} value="{{search}}" {% endif %} name="search" aria-label="Search">
+                </div>
+                <button class="btn btn-outline-dark nav-item my-2 my-sm-0" type="submit">Search</button>
+                <!-- Добавьте другие элементы фильтрации по необходимости -->
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!-- Главная страница -->
+<div class="container mt-4">
+    <!-- Случайная цитата -->
+    <div class="jumbotron">
+        <h3 class="display-10" id="random-quote-text">" {{random_quote.quote}}</h3>
+        <p class="lead" id="random-author-info">{{random_quote.author}}</p>
+    </div>
+
+    <!-- Другие цитаты -->
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Other Quotes</h2>
+            <ul class="list-group" id="other-quotes">
+                <!-- Цитаты будут добавляться с помощью Django -->
+                {% for quote in quotes %}
+                <li class="list-group-item quote-item">
+                    <span class="quote-text">" {{quote.title}}</span>
+                    <a href="{% url 'like-quote' quote.id %}" class="float-right like-info" style="color: black;">
+                        {% if request.user in quote.likes.all %}
+                        <i class="fas fa-heart like-icon-active"></i>
+                        {% else %}
+                        <i class="far fa-heart like-icon"></i>
+                        {% endif %}
+                        <span class="like-count">{{quote.likes.count}}</span>
+                    </a>
+                    <br>
+                    <span class="small author-info">
+                        <i class="fas fa-user"></i> {{quote.author}}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h2>Create Your Quote</h2>
+            <a class="btn btn-primary" href="{% url 'create-quote' %}">Create Quote</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

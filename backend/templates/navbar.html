@@ -1,0 +1,40 @@
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+    <a class="navbar-brand" href="{% url 'home' %}">Your Site</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'list-quote' %}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Quotes" {% if search %}
+                    value="{{search}}" {% endif %} name="search" aria-label="Search">
+                <button class="btn btn-outline-light nav-item my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <!-- <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'list-quote' %}">
+                {% csrf_token %}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search Quotes" {% if search %}
+                    value="{{search}}" {% endif %} name="search" aria-label="Search">
+                <button class="btn btn-outline-light nav-item my-2 my-sm-0" type="submit" name="search">Search</button>
+            </form> -->
+            <li class="nav-item nav-item-margin">
+                <a class="nav-link {% if request.resolver_match.view_name == 'list-quote' %} active {% endif %}" href="{% url 'list-quote' %}">Quotes</a>
+            </li>
+            <li class="nav-item nav-item-margin">
+                <a class="nav-link {% if request.resolver_match.view_name == 'create-quote' %} active {% endif %}" href="{% url 'create-quote' %}">Create Quote</a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name == 'user-profile' %} active {% endif %}" href="{% url 'user-profile' request.user.id %}">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i></a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
