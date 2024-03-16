@@ -14,7 +14,6 @@ def homeView(request):
     # random_quote = requests.get(
     #     api_url, headers={"X-Api-Key": "#"}
     # ).json()[0]
-    #
     # random_title = random_quote["quote"]
     # random_author = random_quote["author"]
     # random_tag = random_quote["category"]
