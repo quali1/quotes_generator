@@ -10,35 +10,36 @@ from .forms import QuoteForm, TagForm
 
 
 def homeView(request):
-    api_url = "https://api.api-ninjas.com/v1/quotes?category="
-    random_quote = requests.get(
-        api_url, headers={"X-Api-Key": "vJCRtxqeRnAO8Dl+WDocgA==f90khWDDyFK5x57K"}
-    ).json()[0]
-
-    random_title = random_quote["quote"]
-    random_author = random_quote["author"]
-    random_tag = random_quote["category"]
+    # api_url = "https://api.api-ninjas.com/v1/quotes?category="
+    # random_quote = requests.get(
+    #     api_url, headers={"X-Api-Key": "#"}
+    # ).json()[0]
+    #
+    # random_title = random_quote["quote"]
+    # random_author = random_quote["author"]
+    # random_tag = random_quote["category"]
 
     tags = list(Tag.objects.values_list("tag", flat=True))
     creator = User.objects.get(username="api")
 
-    instance = Quote(
-        title=random_title,
-        author=random_author,
-        creator=creator,
-        hide_creator=True,
-    )
-    instance.save()
-    if random_tag not in tags:
-        tag = Tag.objects.create(tag=random_tag)
-        instance.tags.add(tag)
+    # instance = Quote(
+    #     title=random_title,
+    #     author=random_author,
+    #     creator=creator,
+    #     hide_creator=True,
+    # )
+    # instance.save()
+    # if random_tag not in tags:
+    #     tag = Tag.objects.create(tag=random_tag)
+    #     instance.tags.add(tag)
 
     quotes = Quote.objects.all()
-    context = {"quotes": quotes, "random_quote": random_quote}
+    # context = {"quotes": quotes, "random_quote": random_quote}
+    context = {"quotes": quotes}
     return render(request, "quotes/home.html", context)
 
 
-@login_required(login_url="home")
+@login_required(login_url="login")
 def quoteCreateView(request):
     form = QuoteForm
     if request.method == "POST":
